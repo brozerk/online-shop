@@ -69,7 +69,7 @@ function validate(array $data, PDO $connection): array
 
 function validateLastName(array $data): ?string
 {
-    $lastName = $data['lastName'] ?? null;
+    $lastName = $data['last_name'] ?? null;
 
     if (empty($lastName)) {
         return 'Введите фамилию';
@@ -84,7 +84,7 @@ function validateLastName(array $data): ?string
 
 function validateFirstName(array $data): ?string
 {
-    $firstName = $data['firstName'] ?? null;
+    $firstName = $data['first_name'] ?? null;
 
     if (empty($firstName)) {
         return 'Введите имя';
@@ -99,7 +99,7 @@ function validateFirstName(array $data): ?string
 
 function validateMiddleName(array $data): ?string
 {
-    $middleName = $data['middleName'] ?? null;
+    $middleName = $data['middle_name'] ?? null;
 
     if (empty($middleName)) {
         return null;
@@ -137,7 +137,7 @@ function validateEmail(array $data, $connection): ?string
 
 function validatePhoneNumber(?array $data): ?string
 {
-    $phoneNumber = $data['phoneNumber'] ?? null;
+    $phoneNumber = $data['phone_number'] ?? null;
 
     if (empty($phoneNumber)) {
         return 'Введите номер телефона';
