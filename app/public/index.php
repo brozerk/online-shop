@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $sth = $connection->prepare(
             'INSERT INTO users (last_name, first_name, middle_name, email, phone_number, password)
-                    VALUES (:last_name, :first_name, :middle_name, :email, :phone_number, :password)'
+                    VALUES (:lastName, :firstName, :middleName, :email, :phoneNumber, :password)'
         );
         $sth->execute([
-            'last_name' => $lastName,
-            'first_name' => $firstName,
-            'middle_name' => $middleName,
+            'lastName' => $lastName,
+            'firstName' => $firstName,
+            'middleName' => $middleName,
             'email' => $email,
-            'phone_number' => $phoneNumber,
+            'phoneNumber' => $phoneNumber,
             'password' => $password
         ]);
     }
@@ -35,15 +35,34 @@ function validate(array $data, PDO $connection): array
     $errors = [];
 
     $lastNameError = validateLastName($data);
-    if (empty($lastNameError)) {
+    if (!empty($lastNameError)) {
         $errors['lastName'] = $lastNameError;
     }
 
-    $errors['firstName'] = validateFirstName($data['first_name']);
-    $errors['middleName'] = validateMiddleName($data['middle_name']);
-    $errors['email'] = validateEmail($data['email'], $connection);
-    $errors['phoneNumber'] = validatePhoneNumber($data['phone_number']);
-    $errors['password'] = validatePassword($data['password']);
+    $firstNameError = validateFirstName($data);
+    if (!empty($firstNameError)) {
+        $errors['firstName'] = $firstNameError;
+    }
+
+    $middleNameError = validateMiddleName($data);
+    if (!empty($middleNameError)) {
+        $errors['middleName'] = $middleNameError;
+    }
+
+    $emailError = validateEmail($data, $connection);
+    if (!empty($emailError)) {
+        $errors['email'] = $emailError;
+    }
+
+    $phoneNumberError = validatePhoneNumber($data);
+    if (!empty($phoneNumberError)) {
+        $errors['phoneNumber'] = $phoneNumberError;
+    }
+
+    $passwordError = validatePassword($data);
+    if (!empty($passwordError)) {
+        $errors['password'] = $passwordError;
+    }
 
     return $errors;
 }
@@ -63,77 +82,87 @@ function validateLastName(array $data): ?string
     return null;
 }
 
-function validateFirstName(?string $firstName): ?string
+function validateFirstName(array $data): ?string
 {
-    if (!empty($firstName)) {
-        if (strlen($firstName) >= 2) {
-            return null;
-        } else {
-            return 'Имя должно содержать не менее 2 букв';
-        }
-    } else {
+    $firstName = $data['firstName'] ?? null;
+
+    if (empty($firstName)) {
         return 'Введите имя';
     }
+
+    if (strlen($firstName) < 2) {
+        return 'Имя должно содержать не менее 2 букв';
+    }
+
+    return null;
 }
 
-function validateMiddleName(?string $middleName): ?string
+function validateMiddleName(array $data): ?string
 {
-    if (!empty($middleName)) {
-        if (strlen($middleName) >= 2) {
-            return null;
-        } else {
-            return 'Отчество должно содержать не менее 2 букв';
-        }
-    } else {
+    $middleName = $data['middleName'] ?? null;
+
+    if (empty($middleName)) {
         return null;
     }
+
+    if (strlen($middleName) < 2) {
+        return 'Отчество должно содержать не менее 2 букв';
+    }
+
+    return null;
 }
 
-function validateEmail(?string $email, $connection): ?string
+function validateEmail(array $data, $connection): ?string
 {
-    if (!empty($email)) {
-        if (strlen($email) >= 5) {
-            $stmt = $connection->prepare("SELECT * FROM users WHERE email=?");
-            $stmt->execute([$email]);
-            $user = $stmt->fetch();
+    $email = $data['email'] ?? null;
 
-            if ($user === false) {
-                return null;
-            } else {
-                return 'Такая почта уже зарегистрирована';
-            }
-        } else {
-            return 'Почта должна содержать не менее 5 символов';
-        }
-    } else {
+    if (empty($email)) {
         return 'Введите почту';
     }
+
+    if (strlen($email) < 5) {
+        return 'Почта должна содержать не менее 5 символов';
+    }
+
+    $stmt = $connection->prepare("SELECT email FROM users WHERE email=?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if (!empty($user)) {
+        return 'Такая почта уже зарегистрирована';
+    }
+
+    return null;
 }
 
-function validatePhoneNumber(?string $phoneNumber): ?string
+function validatePhoneNumber(?array $data): ?string
 {
-    if (!empty($phoneNumber)) {
-        if (strlen($phoneNumber) >= 10) {
-            return null;
-        } else {
-            return 'Номер телефона должен содержать не менее 10 цифр';
-        }
-    } else {
+    $phoneNumber = $data['phoneNumber'] ?? null;
+
+    if (empty($phoneNumber)) {
         return 'Введите номер телефона';
     }
+
+    if (strlen($phoneNumber) < 10) {
+        return 'Номер телефона должен содержать не менее 10 цифр';
+    }
+
+    return null;
 }
 
-function validatePassword(?string $password): ?string
+function validatePassword(array $data): ?string
 {
-    if (!empty($password)) {
-        if (strlen($password) >= 8) {
-            return null;
-        } else {
-            return 'Пароль должен содержать не менее 8 символов';
-        }
-    } else {
+    $password = $data['password'] ?? null;
+
+    if (empty($password)) {
         return 'Введите пароль';
     }
+
+    if (strlen($password) < 8) {
+        return 'Пароль должен содержать не менее 8 символов';
+    }
+
+    return null;
 }
 ?>
 
