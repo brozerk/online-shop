@@ -7,8 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validateSignIn($_POST);
 
     if (empty($errors)) {
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
         $connection = new PDO("pgsql:host=db;dbname=dbname", 'dbuser', 'dbpwd');
 

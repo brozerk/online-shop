@@ -7,12 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validateSignUp($_POST, $connection);
 
     if (empty($errors)) {
-        $lastName = $_POST["last_name"] ?? null;
-        $firstName = $_POST["first_name"] ?? null;
+        $lastName = $_POST["last_name"];
+        $firstName = $_POST["first_name"];
         $middleName = $_POST["middle_name"] ?? null;
-        $email = $_POST["email"] ?? null;
-        $phoneNumber = $_POST["phone_number"] ?? null;
-        $password = $_POST["password"] ?? null;
+        $email = $_POST["email"];
+        $phoneNumber = $_POST["phone_number"];
+        $password = $_POST["password"];
 
         $stmt = $connection->prepare(
             'INSERT INTO users (last_name, first_name, middle_name, email, phone_number, password)
