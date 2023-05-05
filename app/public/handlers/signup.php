@@ -164,4 +164,4 @@ function validatePassword(array $data): ?string
     return null;
 }
 
-require_once './forms/signup.phtml';
+require_once './views/signup.phtml';

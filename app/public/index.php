@@ -2,12 +2,15 @@
 
 $requestUri = $_SERVER['REQUEST_URI'];
 
-if ($requestUri === '/signup') {
-    require_once './handlers/signup.php';
-} elseif ($requestUri === '/signin') {
-    require_once './handlers/signin.php';
-} elseif ($requestUri === '/main') {
-    require_once  './handlers/main.php';
-} else {
-    require_once './forms/notFound.phtml';
+require_once route($requestUri);
+
+function route(?string $requestUri): string
+{
+    if (preg_match('#/(?<route>[a-z0-9-_]+)#', $requestUri, $params)
+        &&
+        file_exists("./handlers/{$params['route']}.php"))
+    {
+        return "./handlers/{$params['route']}.php";
+    }
+    return './views/notFound.phtml';
 }

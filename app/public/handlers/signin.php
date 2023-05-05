@@ -73,4 +73,4 @@ function validatePassword(array $data): ?string
     return null;
 }
 
-require_once './forms/signin.phtml';
+require_once './views/signin.phtml';

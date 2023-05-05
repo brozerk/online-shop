@@ -12,20 +12,28 @@
                 <form action="" method="POST">
                     <div class="inputContainer">
                         <label class="label" for="email"><img src="https://i.imgur.com/Hn13wvm.png" class="labelIcon"><span>
-                                Email Address*
-                                <span style="color: red">
-                                    <?= $errors['email'] ?? ''; ?>
+                                Email Address
                                 </span>
-                            </span></label>
+                            <span style="color: red">
+                                *
+                                </span>
+                                <span style="color: red">
+                                    <?= ($errors['email'] ?? ''); ?>
+                                </span>
+                        </label>
                         <input type="text" class="input" name="email" placeholder="Enter your Email Address">
                     </div>
                     <div class="inputContainer">
                         <label class="label" for="password"><img src="https://i.imgur.com/g5SvdfG.png"
-                                                                     class="labelIcon"><span>Password*
-                                <span style="color: red">
-                                    <?= $errors['password'] ?? ''; ?>
+                                                                     class="labelIcon"><span>Password
                                 </span>
-                            </span></label>
+                                <span style="color: red">
+                                    *
+                                </span>
+                                <span style="color: red">
+                                    <?= ($errors['password'] ?? ''); ?>
+                                </span>
+                        </label>
                         <input type="password" class="input" name="password" placeholder="Enter your Password">
                     </div>
                     <div>
