@@ -4,7 +4,7 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $errors = validateSignIn($_POST);
+    $errors = validate($_POST);
 
     if (empty($errors)) {
         $email = $_POST['email'];
@@ -17,15 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user = $stmt->fetch();
 
-        if (password_verify($password, $user['password'])) {
+        if ($user && password_verify($password, $user['password'])) {
             $_SESSION['id'] = $user['id'];
 
             header("Location: /main");
+        } else {
+            $errors['verify'] = 'Неправильный логин или пароль';
         }
     }
 }
 
-function validateSignIn(array $data): array
+function validate(array $data): array
 {
     $errors = [];
 

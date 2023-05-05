@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $connection = new PDO("pgsql:host=db;dbname=dbname", 'dbuser', 'dbpwd');
 
-    $errors = validateSignUp($_POST, $connection);
+    $errors = validate($_POST, $connection);
 
     if (empty($errors)) {
         $lastName = $_POST["last_name"];
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-function validateSignUp(array $data, PDO $connection): array
+function validate(array $data, PDO $connection): array
 {
     $errors = [];
 
@@ -48,7 +48,7 @@ function validateSignUp(array $data, PDO $connection): array
         $errors['middleName'] = $middleNameError;
     }
 
-    $emailError = validateEmailForSignUp($data, $connection);
+    $emailError = validateEmail($data, $connection);
     if (!empty($emailError)) {
         $errors['email'] = $emailError;
     }
@@ -111,28 +111,8 @@ function validateMiddleName(array $data): ?string
     return null;
 }
 
-function validateEmailForSignUp(array $data, $connection): ?string
+function validateEmail(array $data, $connection): ?string
 {
-    $error = validateEmail($data);
-
-    if (!empty($error)) {
-        return $error;
-    }
-
-    $email = $data['email'] ?? null;
-
-    $stmt = $connection->prepare("SELECT * FROM users WHERE email=?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-
-    if (!empty($user)) {
-        return 'Такая почта уже зарегистрирована';
-    }
-
-    return null;
-}
-
-function validateEmail(array $data): ?string {
     $email = $data['email'] ?? null;
 
     if (empty($email)) {
@@ -141,6 +121,14 @@ function validateEmail(array $data): ?string {
 
     if (strlen($email) < 5) {
         return 'Почта должна содержать не менее 5 символов';
+    }
+
+    $stmt = $connection->prepare("SELECT * FROM users WHERE email=?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if (!empty($user)) {
+        return 'Такая почта уже зарегистрирована';
     }
 
     return null;

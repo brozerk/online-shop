@@ -13,16 +13,25 @@
                     <div class="inputContainer">
                         <label class="label" for="email"><img src="https://i.imgur.com/Hn13wvm.png" class="labelIcon"><span>
                                 Email Address*
-                                <?= $errors['email'] ?? ''; ?>
+                                <span style="color: red">
+                                    <?= $errors['email'] ?? ''; ?>
+                                </span>
                             </span></label>
                         <input type="text" class="input" name="email" placeholder="Enter your Email Address">
                     </div>
                     <div class="inputContainer">
                         <label class="label" for="password"><img src="https://i.imgur.com/g5SvdfG.png"
                                                                      class="labelIcon"><span>Password*
-                                <?= $errors['password'] ?? null; ?>
+                                <span style="color: red">
+                                    <?= $errors['password'] ?? ''; ?>
+                                </span>
                             </span></label>
                         <input type="password" class="input" name="password" placeholder="Enter your Password">
+                    </div>
+                    <div>
+                        <span style="color: red">
+                            <?= $errors['verify'] ?? ''; ?>
+                        </span>
                     </div>
                     <button type="submit" class="LoginButton">Login</button>
                 </form>
