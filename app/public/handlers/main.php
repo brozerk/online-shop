@@ -9,7 +9,8 @@ if (isset($_SESSION['id'])) {
         './views/main.phtml',
         [
             'errors' => $errors
-        ]
+        ],
+        true
     ];
 } else {
     header('Location: /signin');

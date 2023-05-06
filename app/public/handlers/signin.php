@@ -79,5 +79,6 @@ return [
     './views/signin.phtml',
     [
         'errors' => $errors
-    ]
+    ],
+    true
 ];

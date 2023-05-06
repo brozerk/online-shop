@@ -169,6 +169,7 @@ function validatePassword(array $data): ?string
 return [
     './views/signup.phtml',
     [
-        'errors' => $errors
-    ]
+        'errors' => $errors,
+    ],
+    true
 ];

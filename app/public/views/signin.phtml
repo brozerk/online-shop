@@ -21,9 +21,7 @@
                                     <?= ($errors['email'] ?? ''); ?>
                                 </span>
                         </label>
-                        <label>
-                            <input type="text" class="input" name="email" placeholder="Enter your Email Address">
-                        </label>
+                        <input type="text" class="input" name="email" placeholder="Enter your Email Address">
                     </div>
                     <div class="inputContainer">
                         <label class="label" for="password"><img src="https://i.imgur.com/g5SvdfG.png"
@@ -36,9 +34,7 @@
                                     <?= ($errors['password'] ?? ''); ?>
                                 </span>
                         </label>
-                        <label>
-                            <input type="password" class="input" name="password" placeholder="Enter your Password">
-                        </label>
+                        <input type="password" class="input" name="password" placeholder="Enter your Password">
                     </div>
                     <div>
                         <span style="color: red">
@@ -96,7 +92,7 @@
         background-size: cover;
     }
 
-    .LoginPageInnerContainer .LoginFormContainer {
+    .LoginPageInnerContainer .LoginFormContainer .LogoContainer .logo {
         height: 60px;
         margin-bottom: 30px;
     }
@@ -106,7 +102,7 @@
         font-weight: 500;
     }
 
-    .LoginPageInnerContainer .LoginFormContainer {
+    .LoginPageInnerContainer .LoginFormContainer .subHeader {
         color: #9aa4ad;
         margin-top: 5px;
         margin-bottom: 40px;
@@ -143,7 +139,7 @@
         outline: 0px !important;
     }
 
-    .LoginPageInnerContainer .LoginFormContainer {
+    .LoginPageInnerContainer .LoginFormContainer .OptionsContainer {
         display: flex;
         justify-content: space-between;
     }
@@ -157,7 +153,7 @@
         max-width: 500px;
     }
 
-    .LoginPageInnerContainer .LoginFormContainer  {
+    .LoginPageInnerContainer .LoginFormContainer .checkbox {
         width: 15px;
         height: 15px;
         margin: 0px;
@@ -165,7 +161,7 @@
         border: 1px solid #d6d7db;
     }
 
-    .LoginPageInnerContainer .LoginFormContainer  {
+    .LoginPageInnerContainer .LoginFormContainer .checkboxContainer {
         display: flex;
         justify-content: flex-start;
         align-items: center;
@@ -177,7 +173,7 @@
         color: #9aa4ad;
     }
 
-    .LoginPageInnerContainer .LoginFormContainer {
+    .LoginPageInnerContainer .LoginFormContainer .ForgotPasswordLink {
         color: #e7483b;
         text-decoration: none;
     }
