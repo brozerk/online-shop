@@ -57,7 +57,9 @@
                 <?= $errors['password'] ?? ''; ?>
             </span>
         </label>
-        <input type="password" placeholder="Введите пароль" name="password" required>
+        <label>
+            <input type="password" placeholder="Введите пароль" name="password" required>
+        </label>
 
 
         <button type="submit" class="registerbtn">Зарегистрироваться</button>
@@ -112,11 +114,5 @@
     /* Add a blue text color to links */
     a {
         color: dodgerblue;
-    }
-
-    /* Set a grey background color and center the text of the "sign in" section */
-    .signin {
-        background-color: #f1f1f1;
-        text-align: center;
     }
 </style>

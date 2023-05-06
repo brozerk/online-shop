@@ -2,8 +2,15 @@
 
 session_start();
 
+$errors = [];
+
 if (isset($_SESSION['id'])) {
-    require_once './views/main.phtml';
+    return [
+        './views/main.phtml',
+        [
+            'errors' => $errors
+        ]
+    ];
 } else {
     header('Location: /signin');
 }

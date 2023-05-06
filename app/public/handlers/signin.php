@@ -2,6 +2,8 @@
 
 session_start();
 
+$errors = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = validate($_POST);
@@ -73,4 +75,9 @@ function validatePassword(array $data): ?string
     return null;
 }
 
-require_once './views/signin.phtml';
+return [
+    './views/signin.phtml',
+    [
+        'errors' => $errors
+    ]
+];

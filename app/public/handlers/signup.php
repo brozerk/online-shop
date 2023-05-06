@@ -1,5 +1,7 @@
 <?php
 
+$errors = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $connection = new PDO("pgsql:host=db;dbname=dbname", 'dbuser', 'dbpwd');
@@ -164,4 +166,9 @@ function validatePassword(array $data): ?string
     return null;
 }
 
-require_once './views/signup.phtml';
+return [
+    './views/signup.phtml',
+    [
+        'errors' => $errors
+    ]
+];
