@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 class App
 {
     private array $routes = [];
@@ -8,7 +10,7 @@ class App
     {
         $requestUri = $_SERVER['REQUEST_URI'];
 
-        $handler = $this->route($requestUri);
+        $handler = $this->route();
 
         list($view, $params, $isLayout) = require_once $handler;
 
@@ -31,14 +33,22 @@ class App
         }
     }
 
-    private function route(string $uri): string
+    private function route(): string
     {
-        if (preg_match('#/(?<route>[a-z0-9-_]+)#', $uri, $params)
-            &&
-            file_exists("./handlers/{$params['route']}.php"))
-        {
-            return "./handlers/{$params['route']}.php";
+        $uri = $_SERVER['REQUEST_URI'];
+
+        foreach ($this->routes as $pattern => $handler) {
+            if (preg_match("#^$pattern$#", $uri)) {
+                if (file_exists($handler)) {
+                    return $handler;
+                }
+            }
         }
         return './handlers/notFound.php';
+    }
+
+    public function addRoute(string $route, string $handlerPath): void
+    {
+        $this->routes[$route] = $handlerPath;
     }
 }
