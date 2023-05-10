@@ -1,24 +1,20 @@
 <?php
 
-spl_autoload_register(function ($class) {
-    $appRoot = dirname(__DIR__);
+require '../Autoloader.php';
 
-    $file = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
-    $file = preg_replace('#^App#', $appRoot, $file);
-
-    if (file_exists($file)) {
-        require $file;
-        return true;
-    }
-    return false;
-});
+Autoloader::register(dirname(__DIR__));
 
 use App\App;
+use App\Controller\UserController;
 
 $app = new App();
 
-$app->addRoute("/signup", "./handlers/signup.php");
-$app->addRoute("/signin", "./handlers/signin.php");
-$app->addRoute("/main", "./handlers/main.php");
+$app->get('/signup', [UserController::class, 'signUp']);
+$app->post('/signup', [UserController::class, 'signUp']);
+
+$app->get('/signin', [UserController::class, 'signIn']);
+$app->post('/signin', [UserController::class, 'signIn']);
+
+$app->get('/main', [UserController::class, 'goToMain']);
 
 $app->run();

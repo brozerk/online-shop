@@ -2,17 +2,33 @@
 
 namespace App;
 
+use PDO;
+
 class App
 {
     private array $routes = [];
 
     public function run(): void
     {
-        $requestUri = $_SERVER['REQUEST_URI'];
-
         $handler = $this->route();
 
-        list($view, $params, $isLayout) = require_once $handler;
+        if (is_array($handler)) {
+            list($obj, $method) = $handler;
+
+            if (!is_object($obj)) {
+                $obj = new $obj();
+
+                if ($obj instanceof ConnectionAwareInterface) {
+                    $obj->setConnection(new PDO("pgsql:host=db;dbname=dbname", 'dbuser', 'dbpwd'));
+                }
+            }
+
+            $response = $obj->$method();
+        } else {
+            $response = $handler;
+        }
+
+        list($view, $params, $isLayout) = $response;
 
         extract($params);
 
@@ -33,22 +49,26 @@ class App
         }
     }
 
-    private function route(): string
+    private function route(): array|callable|null
     {
         $uri = $_SERVER['REQUEST_URI'];
+        $method = $_SERVER['REQUEST_METHOD'];
 
-        foreach ($this->routes as $pattern => $handler) {
+        foreach ($this->routes[$method] as $pattern => $handler) {
             if (preg_match("#^$pattern$#", $uri)) {
-                if (file_exists($handler)) {
-                    return $handler;
-                }
+                return $handler;
             }
         }
-        return './handlers/notFound.php';
+        return ['App\Controller\UserController', 'goToNotFound'];
     }
 
-    public function addRoute(string $route, string $handlerPath): void
+    public function get(string $route, array|callable $handler): void
     {
-        $this->routes[$route] = $handlerPath;
+        $this->routes['GET'][$route] = $handler;
+    }
+
+    public function post(string $route, array|callable $callable): void
+    {
+        $this->routes['POST'][$route] = $callable;
     }
 }
