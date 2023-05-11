@@ -2,16 +2,15 @@
 
 namespace App\Controller;
 
-use App\ConnectionAwareInterface;
-use PDO;
+use App\Repository\UserRepository;
 
-class UserController implements ConnectionAwareInterface
+class UserController
 {
-    private PDO $connection;
+    private UserRepository $userRepository;
 
-    public function setConnection(PDO $connection): void
+    public function __construct()
     {
-        $this->connection = $connection;
+        $this->userRepository = new UserRepository();
     }
 
     public function signUp(): array
@@ -23,25 +22,7 @@ class UserController implements ConnectionAwareInterface
             $errors = $this->validateSignUp($_POST);
 
             if (empty($errors)) {
-                $lastName = $_POST["last_name"];
-                $firstName = $_POST["first_name"];
-                $middleName = $_POST["middle_name"] ?? null;
-                $email = $_POST["email"];
-                $phoneNumber = $_POST["phone_number"];
-                $password = $_POST["password"];
-
-                $stmt = $this->connection->prepare(
-                    'INSERT INTO users (last_name, first_name, middle_name, email, phone_number, password)
-                    VALUES (:lastName, :firstName, :middleName, :email, :phoneNumber, :password)'
-                );
-                $stmt->execute([
-                    'lastName' => $lastName,
-                    'firstName' => $firstName,
-                    'middleName' => $middleName,
-                    'email' => $email,
-                    'phoneNumber' => $phoneNumber,
-                    'password' => password_hash($password, PASSWORD_DEFAULT)
-                ]);
+                $this->userRepository->create($_POST);
             }
         }
 
@@ -65,21 +46,7 @@ class UserController implements ConnectionAwareInterface
             $errors = $this->validateSignIn($_POST);
 
             if (empty($errors)) {
-                $email = $_POST['email'];
-                $password = $_POST['password'];
-
-                $stmt = $this->connection->prepare('SELECT * FROM users WHERE email=?');
-                $stmt->execute([$email]);
-
-                $user = $stmt->fetch();
-
-                if ($user && password_verify($password, $user['password'])) {
-                    $_SESSION['id'] = $user['id'];
-
-                    header("Location: /main");
-                } else {
-                    $errors['verify'] = 'Неправильный логин или пароль';
-                }
+                $this->userRepository->authenticate($_POST);
             }
         }
 
@@ -89,39 +56,6 @@ class UserController implements ConnectionAwareInterface
                 'errors' => $errors
             ],
             true
-        ];
-    }
-
-    public function goToMain(): ?array
-    {
-        session_start();
-
-        $errors = [];
-
-        if (isset($_SESSION['id'])) {
-            return [
-                './views/main.phtml',
-                [
-                    'errors' => $errors
-                ],
-                true
-            ];
-        } else {
-            header('Location: /signin');
-            return null;
-        }
-    }
-
-    public function goToNotFound(): array
-    {
-        $errors = [];
-
-        return [
-            './views/notFound.phtml',
-            [
-                'errors' => $errors
-            ],
-            false
         ];
     }
 

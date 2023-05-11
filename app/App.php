@@ -25,7 +25,7 @@ class App
 
             $response = $obj->$method();
         } else {
-            $response = $handler;
+            $response = call_user_func($handler);
         }
 
         list($view, $params, $isLayout) = $response;
@@ -59,7 +59,7 @@ class App
                 return $handler;
             }
         }
-        return ['App\Controller\UserController', 'goToNotFound'];
+        return ['App\Controller\NotFoundController', 'goToNotFound'];
     }
 
     public function get(string $route, array|callable $handler): void
@@ -67,8 +67,8 @@ class App
         $this->routes['GET'][$route] = $handler;
     }
 
-    public function post(string $route, array|callable $callable): void
+    public function post(string $route, array|callable $handler): void
     {
-        $this->routes['POST'][$route] = $callable;
+        $this->routes['POST'][$route] = $handler;
     }
 }
