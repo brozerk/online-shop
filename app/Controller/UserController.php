@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 
 class UserController
 {
-    private UserRepository $userRepository;
-
-    public function __construct()
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = new UserRepository();
     }
 
     public function signUp(): array
@@ -22,7 +20,16 @@ class UserController
             $errors = $this->validateSignUp($_POST);
 
             if (empty($errors)) {
-                $this->userRepository->create($_POST);
+                $lastName = $_POST["last_name"];
+                $firstName = $_POST["first_name"];
+                $middleName = $_POST["middle_name"] ?? null;
+                $email = $_POST["email"];
+                $phoneNumber = $_POST["phone_number"];
+                $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
+                $user = new User($lastName, $firstName, $middleName, $email, $phoneNumber, $password);
+
+                $this->userRepository->create($user);
             }
         }
 
@@ -46,7 +53,18 @@ class UserController
             $errors = $this->validateSignIn($_POST);
 
             if (empty($errors)) {
-                $this->userRepository->authenticate($_POST);
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+
+                $user = $this->userRepository->getUserByEmail($email);
+
+                if ($user->getPassword() && password_verify($password, $user->getPassword())) {
+                    $_SESSION['id'] = $user->getId();
+
+                    header("Location: /main");
+                } else {
+                    $errors['verify'] = 'Неправильный логин или пароль';
+                }
             }
         }
 
@@ -168,9 +186,7 @@ class UserController
             return $errors;
         }
 
-        $stmt = $this->connection->prepare("SELECT * FROM users WHERE email=?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
+        $user = $this->userRepository->getUserByEmail($email);
 
         if (!empty($user)) {
             return 'Такая почта уже зарегистрирована';
