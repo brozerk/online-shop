@@ -7,28 +7,14 @@ Autoloader::register(dirname(__DIR__));
 use App\App;
 use App\Controller\UserController;
 use App\Controller\MainController;
-use App\FileLogger;
-use App\LoggerInterface;
-use App\Repository\UserRepository;
 use App\Container;
 
-$container = new Container();
+$settings = require_once '../Config/settings.php';
+$dependencies = require_once '../Config/dependencies.php';
 
-$container->set(LoggerInterface::class, function () {
-    return new FileLogger();
-});
+$data = array_merge($settings, $dependencies);
 
-$container->set(UserController::class, function (Container $container) {
-    $userRepository = $container->get(UserRepository::class);
-
-    return new UserController($userRepository);
-});
-
-$container->set(UserRepository::class, function () {
-    $connection = new PDO("pgsql:host=db;dbname=dbname", 'dbuser', 'dbpwd');
-
-    return new UserRepository($connection);
-});
+$container = new Container($data);
 
 $app = new App($container);
 

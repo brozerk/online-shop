@@ -6,11 +6,11 @@ use App\Exceptions\ClassNotFoundException;
 
 class Container
 {
-    private array $services = [];
+    private array $services;
 
-    public function set(string $key, callable $callback): void
+    public function __construct(array $data)
     {
-        $this->services[$key] = $callback;
+        $this->services = $data;
     }
 
     /**
@@ -24,8 +24,12 @@ class Container
             }
             throw new ClassNotFoundException();
         }
-        $callback = $this->services[$key];
 
-        return $callback($this);
+        if (is_callable($this->services[$key])) {
+            $callback = $this->services[$key];
+
+            return $callback($this);
+        }
+        return $this->services[$key];
     }
 }

@@ -52,14 +52,14 @@ class App
             $logger = $this->container->get(LoggerInterface::class);
 
             $data = [
-                'exception' => $exception->getMessage(),
+                'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine()
             ];
 
             $logger->writeError('Произошла ошибка во время обработки запроса', $data);
 
-            require './views/error500.phtml';
+            require '../public/views/error500.phtml';
         }
     }
 

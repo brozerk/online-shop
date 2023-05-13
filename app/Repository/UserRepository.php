@@ -34,9 +34,12 @@ class UserRepository
 
         $arr = $stmt->fetch();
 
-        $user = new User($arr['last_name'], $arr['first_name'], $arr['middle_name'], $arr['email'], $arr['phone_number'], $arr['password']);
-        $user->setId($arr['id']);
+        if (!empty($arr)) {
+            $user = new User($arr['last_name'], $arr['first_name'], $arr['middle_name'], $arr['email'], $arr['phone_number'], $arr['password']);
+            $user->setId($arr['id']);
 
-        return $user;
+            return $user;
+        }
+        return $arr;
     }
 }
