@@ -22,7 +22,7 @@ class Container
             if (class_exists($key)) {
                 return new $key();
             }
-            throw new ClassNotFoundException();
+            throw new ClassNotFoundException("the class '{$key}' is not found");
         }
 
         if (is_callable($this->services[$key])) {
