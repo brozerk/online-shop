@@ -11,7 +11,7 @@ class CategoryRepository
     {
     }
 
-    public function getAllCategories(): array
+    public function getAll(): array
     {
         $categories = [];
 

@@ -15,7 +15,7 @@ class GoodController
         session_start();
 
         if (isset($_SESSION['id'])) {
-            $goods = $this->goodRepository->getAllGoods($categoryId);
+            $goods = $this->goodRepository->getAll($categoryId);
 
             if (!empty($goods)) {
                 return [

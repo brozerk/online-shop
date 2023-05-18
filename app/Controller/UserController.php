@@ -11,7 +11,7 @@ class UserController
     {
     }
 
-    public function signUp(): array
+    public function goToSignUp(): array
     {
         $errors = [];
 
@@ -42,7 +42,7 @@ class UserController
         ];
     }
 
-    public function signIn(): array
+    public function goToSignIn(): array
     {
         session_start();
 
@@ -56,7 +56,7 @@ class UserController
                 $email = $_POST['email'];
                 $password = $_POST['password'];
 
-                $user = $this->userRepository->getUserByEmail($email);
+                $user = $this->userRepository->getByEmail($email);
 
                 if (is_object($user) && password_verify($password, $user->getPassword())) {
                     $_SESSION['id'] = $user->getId();

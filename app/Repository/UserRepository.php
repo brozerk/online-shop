@@ -27,7 +27,7 @@ class UserRepository
         ]);
     }
 
-    public function getUserByEmail(string $email): object|bool
+    public function getByEmail(string $email): object|bool
     {
         $stmt = $this->connection->prepare('SELECT * FROM users WHERE email=?');
         $stmt->execute([$email]);

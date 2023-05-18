@@ -1,0 +1,59 @@
+<div class="body" align="center">
+    <div class="cart-goods body_inner" >
+        <?php
+        /** @var \App\Entity\Good $cartGood['good'] */
+        foreach ($cartGoods as $cartGood):
+            ?>
+            <div class="cart-good">
+                <div class="cart-good_image">
+                    <img class="cart-good_image_inner" src="<?= $cartGood['good']->getImage(); ?>"
+                </div>
+
+                <div class="cart-good_name">
+                    <h3><?= $cartGood['good']->getName(); ?></h3>
+                </div>
+
+                <div class="cart-good_color">
+                    <span><?= $cartGood['good']->getColor(); ?></span>
+                </div>
+
+                <div class="cart-good_size">
+                    <span><?= $cartGood['good']->getSize(); ?></span>
+                </div>
+
+                <div class="cart-good_price">
+                    <h4>$<?= $cartGood['good']->getPrice(); ?></h4>
+                </div>
+
+                <div class="cart-good_quantity">
+                    <span>количество - <?= $cartGood['quantity']; ?></span>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<style>
+    .body_inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cart-goods {
+        position: absolute;
+        left: 50%;
+        top: 30%;
+        bottom: 0;
+        transform: translate(-50%);
+    }
+
+    .cart-good {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .cart-good_image_inner {
+        height: 300px;
+        width: 300px;
+    }
+</style>

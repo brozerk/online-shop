@@ -5,6 +5,7 @@ require '../Autoloader.php';
 Autoloader::register(dirname(__DIR__));
 
 use App\App;
+use App\Controller\CartGoodController;
 use App\Controller\CategoryController;
 use App\Controller\GoodController;
 use App\Controller\UserController;
@@ -19,15 +20,17 @@ $container = new Container($data);
 
 $app = new App($container);
 
-$app->get('/signup', [UserController::class, 'signUp']);
-$app->post('/signup', [UserController::class, 'signUp']);
+$app->get('/signup', [UserController::class, 'goToSignUp']);
+$app->post('/signup', [UserController::class, 'goToSignUp']);
 
-$app->get('/signin', [UserController::class, 'signIn']);
-$app->post('/signin', [UserController::class, 'signIn']);
+$app->get('/signin', [UserController::class, 'goToSignIn']);
+$app->post('/signin', [UserController::class, 'goToSignIn']);
 
 $app->get('/catalog', [CategoryController::class, 'goToCatalog']);
 $app->post('/catalog', [CategoryController::class, 'goToCatalog']);
 
 $app->get('/catalog/(?<categoryId>[0-9]+)', [GoodController::class, 'goToCategory']);
+
+$app->get('/cart', [CartGoodController::class, 'goToCart']);
 
 $app->run();

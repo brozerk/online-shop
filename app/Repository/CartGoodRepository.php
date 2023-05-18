@@ -5,22 +5,23 @@ namespace App\Repository;
 use App\Entity\Good;
 use PDO;
 
-class GoodRepository
+class CartGoodRepository
 {
     public function __construct(private PDO $connection)
     {
     }
 
-    public function getAll(int $categoryId): array
+    public function getByUserId(int $userId): array
     {
-        $goods = [];
+        $cartGoods = [];
 
         $stmt = $this->connection->prepare('
-            SELECT *
-            FROM goods
-            WHERE category_id=?
+            SELECT *, g.image, g.name, g.color, g.size, g.price
+            FROM cart_goods AS c_g
+            JOIN goods AS g ON g.id = c_g.good_id
+            WHERE c_g.user_id = ?
         ');
-        $stmt->execute([$categoryId]);
+        $stmt->execute([$userId]);
 
         $response = $stmt->fetchAll();
 
@@ -36,9 +37,13 @@ class GoodRepository
 
             $good->setId($value['id']);
 
-            $goods[] = $good;
+            $quantity = $value['quantity'];
+
+            $cartGood = ['good' => $good, 'quantity' => $quantity];
+
+            $cartGoods[] = $cartGood;
         }
 
-        return $goods;
+        return $cartGoods;
     }
 }

@@ -1,5 +1,23 @@
 <header>
     <h1 class="header_name" align="center">the market</h1>
+
+    <div class="routes" align="center">
+        <a class="go-to-signup_button routes_inner" href="/signup">
+            <button type="submit">signup</button>
+        </a>
+
+        <a class="go-to-signin_button routes_inner" href="/signin">
+            <button type="submit">signin</button>
+        </a>
+
+        <a class="go-to-categories_button routes_inner" href="/catalog">
+            <button type="submit">categories</button>
+        </a>
+
+        <a class="go-to-cart_button routes_inner" href="/cart">
+            <button type="submit">cart</button>
+        </a>
+    </div>
 </header>
 <body>
     {content}
@@ -21,6 +39,11 @@
 </footer>
 
 <style>
+    /*.routes {*/
+    /*    display: flex;*/
+    /*    flex-direction: row;*/
+    /*}*/
+
     header {
         margin-top: 10px;
         padding-top: 10px;

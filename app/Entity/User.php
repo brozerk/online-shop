@@ -7,7 +7,7 @@ class User
     private int $id;
     private string $lastName;
     private string $firstName;
-    private string $middleName;
+    private ?string $middleName;
     private string $email;
     private string $phoneNumber;
     private string $password;

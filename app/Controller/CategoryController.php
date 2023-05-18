@@ -15,7 +15,7 @@ class CategoryController
         session_start();
 
         if (isset($_SESSION['id'])) {
-            $categories = $this->categoryRepository->getAllCategories();
+            $categories = $this->categoryRepository->getAll();
 
             return [
                 '../Views/categories.phtml',

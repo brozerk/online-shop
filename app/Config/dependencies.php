@@ -1,11 +1,13 @@
 <?php
 
 use App\Container;
+use App\Controller\CartGoodController;
 use App\Controller\CategoryController;
 use App\Controller\GoodController;
 use App\Controller\UserController;
 use App\FileLogger;
 use App\LoggerInterface;
+use App\Repository\CartGoodRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GoodRepository;
 use App\Repository\UserRepository;
@@ -55,6 +57,18 @@ return [
         $categoryRepository = $container->get(CategoryRepository::class);
 
         return new CategoryController($categoryRepository);
+    },
+
+    CartGoodRepository::class => function (Container $container) {
+        $connection = $container->get('db');
+
+        return new CartGoodRepository($connection);
+    },
+
+    CartGoodController::class => function (Container $container) {
+        $cartGoodRepository = $container->get(CartGoodRepository::class);
+
+        return new CartGoodController($cartGoodRepository);
     },
 
     LoggerInterface::class => function () {

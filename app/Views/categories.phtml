@@ -1,5 +1,5 @@
 <div class="body" align="center" action="" method="POST">
-    <div class="categories" >
+    <div class="categories body_inner" >
         <?php
             /** @var \App\Entity\Category $category */
             foreach ($categories as $category):
@@ -22,10 +22,15 @@
 </div>
 
 <style>
+    .body_inner {
+        display: flex;
+        flex-direction: column;
+    }
+
     .categories {
         position: absolute;
         left: 50%;
-        top: 20%;
+        top: 30%;
         bottom: 0;
         transform: translate(-50%);
     }
