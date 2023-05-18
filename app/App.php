@@ -2,8 +2,6 @@
 
 namespace App;
 
-use App\Exceptions\ClassNotFoundException;
-
 class App
 {
     private array $routes = [];
@@ -17,6 +15,8 @@ class App
         try {
             $handler = $this->route();
 
+            list($handler, $params) = $handler;
+
             if (is_array($handler)) {
                 list($obj, $method) = $handler;
 
@@ -24,7 +24,12 @@ class App
                     $obj = $this->container->get($obj);
                 }
 
-                $response = $obj->$method();
+                if (empty($params)) {
+                    $response = $obj->$method();
+                } else {
+                    $params = array_values($params);
+                    $response = $obj->$method(...$params);
+                }
             } else {
                 $response = call_user_func($handler);
             }
@@ -40,7 +45,7 @@ class App
 
                 $content = ob_get_clean();
 
-                $layout = file_get_contents('./views/layout.phtml');
+                $layout = file_get_contents('../Views/layout.phtml');
 
                 $result = str_replace('{content}', $content, $layout);
 
@@ -48,7 +53,7 @@ class App
             } else {
                 require_once $view;
             }
-        } catch (ClassNotFoundException $exception) {
+        } catch (\Throwable $exception) {
             $logger = $this->container->get(LoggerInterface::class);
 
             $data = [
@@ -59,7 +64,7 @@ class App
 
             $logger->writeError('Произошла ошибка во время обработки запроса', $data);
 
-            require '../public/views/error500.phtml';
+            require '../Views/error500.phtml';
         }
     }
 
@@ -69,11 +74,21 @@ class App
         $method = $_SERVER['REQUEST_METHOD'];
 
         foreach ($this->routes[$method] as $pattern => $handler) {
-            if (preg_match("#^$pattern$#", $uri)) {
-                return $handler;
+            if (preg_match("#^$pattern$#", $uri, $params)) {
+                foreach ($params as $key => $value) {
+                    if ($key === 0 || intval($key)) {
+                        unset($params[$key]);
+                    }
+                }
+
+                return [
+                    $handler,
+                    $params
+                ];
             }
         }
-        return ['App\Controller\NotFoundController', 'goToNotFound'];
+
+        return [['App\Controller\NotFoundController', 'goToNotFound'], null];
     }
 
     public function get(string $route, array|callable $handler): void

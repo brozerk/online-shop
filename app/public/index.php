@@ -5,8 +5,9 @@ require '../Autoloader.php';
 Autoloader::register(dirname(__DIR__));
 
 use App\App;
+use App\Controller\CategoryController;
+use App\Controller\GoodController;
 use App\Controller\UserController;
-use App\Controller\MainController;
 use App\Container;
 
 $settings = require_once '../Config/settings.php';
@@ -24,6 +25,9 @@ $app->post('/signup', [UserController::class, 'signUp']);
 $app->get('/signin', [UserController::class, 'signIn']);
 $app->post('/signin', [UserController::class, 'signIn']);
 
-$app->get('/main', [MainController::class, 'goToMain']);
+$app->get('/catalog', [CategoryController::class, 'goToCatalog']);
+$app->post('/catalog', [CategoryController::class, 'goToCatalog']);
+
+$app->get('/catalog/(?<categoryId>[0-9]+)', [GoodController::class, 'goToCategory']);
 
 $app->run();

@@ -1,0 +1,54 @@
+<div class="body" align="center">
+    <div class="goods" >
+        <?php
+        /** @var \App\Entity\Good $good */
+        foreach ($goods as $good):
+            ?>
+            <div class="good">
+                <div class="good_image">
+                    <img class="good_image_inner" src="<?= $good->getImage(); ?>"
+                </div>
+
+                <div class="good_name">
+                    <h3><?= $good->getName(); ?></h3>
+                </div>
+
+                <div class="good_color">
+                    <span><?= $good->getColor(); ?></span>
+                </div>
+
+                <div class="good_size">
+                    <span><?= $good->getSize(); ?></span>
+                </div>
+
+                <div class="good_price">
+                    <h4>$<?= $good->getPrice(); ?></h4>
+                </div>
+
+                <div class="good_add-to-cart_button">
+                    <button type="submit">add to cart</button>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<style>
+    .goods {
+        position: absolute;
+        left: 50%;
+        top: 20%;
+        bottom: 0;
+        transform: translate(-50%);
+    }
+
+    .good {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .good_image_inner {
+        height: 300px;
+        weight: 300px;
+    }
+</style>

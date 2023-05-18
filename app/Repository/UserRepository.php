@@ -13,10 +13,10 @@ class UserRepository
 
     public function create(User $user): void
     {
-        $stmt = $this->connection->prepare(
-            'INSERT INTO users (last_name, first_name, middle_name, email, phone_number, password)
-                    VALUES (:lastName, :firstName, :middleName, :email, :phoneNumber, :password)'
-        );
+        $stmt = $this->connection->prepare('
+            INSERT INTO users (last_name, first_name, middle_name, email, phone_number, password)
+            VALUES (:lastName, :firstName, :middleName, :email, :phoneNumber, :password)
+        ');
         $stmt->execute([
             'lastName' => $user->getLastName(),
             'firstName' => $user->getFirstName(),
@@ -27,19 +27,19 @@ class UserRepository
         ]);
     }
 
-    public function getUserByEmail($email): object
+    public function getUserByEmail(string $email): object|bool
     {
         $stmt = $this->connection->prepare('SELECT * FROM users WHERE email=?');
         $stmt->execute([$email]);
 
-        $arr = $stmt->fetch();
+        $response = $stmt->fetch();
 
-        if (!empty($arr)) {
-            $user = new User($arr['last_name'], $arr['first_name'], $arr['middle_name'], $arr['email'], $arr['phone_number'], $arr['password']);
-            $user->setId($arr['id']);
+        if (!empty($response)) {
+            $user = new User($response['last_name'], $response['first_name'], $response['middle_name'], $response['email'], $response['phone_number'], $response['password']);
+            $user->setId($response['id']);
 
             return $user;
         }
-        return $arr;
+        return $response;
     }
 }

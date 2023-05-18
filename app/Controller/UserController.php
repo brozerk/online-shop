@@ -34,7 +34,7 @@ class UserController
         }
 
         return [
-            './views/signup.phtml',
+            '../Views/signup.phtml',
             [
                 'errors' => $errors,
             ],
@@ -58,10 +58,10 @@ class UserController
 
                 $user = $this->userRepository->getUserByEmail($email);
 
-                if ($user->getPassword() && password_verify($password, $user->getPassword())) {
+                if (is_object($user) && password_verify($password, $user->getPassword())) {
                     $_SESSION['id'] = $user->getId();
 
-                    header("Location: /main");
+                    header("Location: /catalog");
                 } else {
                     $errors['verify'] = 'Неправильный логин или пароль';
                 }
@@ -69,7 +69,7 @@ class UserController
         }
 
         return [
-            './views/signin.phtml',
+            '../Views/signin.phtml',
             [
                 'errors' => $errors
             ],

@@ -9,7 +9,7 @@ class NotFoundController
         $errors = [];
 
         return [
-            './views/notFound.phtml',
+            '../Views/notFound.phtml',
             [
                 'errors' => $errors
             ],
