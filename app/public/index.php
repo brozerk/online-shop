@@ -27,10 +27,10 @@ $app->get('/signin', [UserController::class, 'goToSignIn']);
 $app->post('/signin', [UserController::class, 'goToSignIn']);
 
 $app->get('/catalog', [CategoryController::class, 'goToCatalog']);
-$app->post('/catalog', [CategoryController::class, 'goToCatalog']);
 
 $app->get('/catalog/(?<categoryId>[0-9]+)', [GoodController::class, 'goToCategory']);
 
 $app->get('/cart', [CartGoodController::class, 'goToCart']);
+$app->post('/add_to_cart', [CartGoodController::class, 'addToCart']);
 
 $app->run();

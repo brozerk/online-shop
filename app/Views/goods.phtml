@@ -1,38 +1,49 @@
-<div class="body" align="center">
-    <div class="goods" >
-        <?php
-        /** @var \App\Entity\Good $good */
-        foreach ($goods as $good):
-            ?>
-            <div class="good">
-                <div class="good_image">
-                    <img class="good_image_inner" src="<?= $good->getImage(); ?>"
-                </div>
+    <div class="body" align="center">
+        <div class="goods" >
+            <?php
+            /** @var \App\Entity\Good $good */
+            foreach ($goods as $good):
+                ?>
+                <div class="good">
+                    <div class="good_image">
+                        <img class="good_image_inner" src="<?= $good->getImage(); ?>"
+                    </div>
 
-                <div class="good_name">
-                    <h3><?= $good->getName(); ?></h3>
-                </div>
+                    <div class="good_name">
+                        <h3><?= $good->getName(); ?></h3>
+                    </div>
 
-                <div class="good_color">
-                    <span><?= $good->getColor(); ?></span>
-                </div>
+                    <div class="good_color">
+                        <span><?= $good->getColor(); ?></span>
+                    </div>
 
-                <div class="good_size">
-                    <span><?= $good->getSize(); ?></span>
-                </div>
+                    <div class="good_size">
+                        <span><?= $good->getSize(); ?></span>
+                    </div>
 
-                <div class="good_price">
-                    <h4>$<?= $good->getPrice(); ?></h4>
-                </div>
+                    <div class="good_price">
+                        <h4>$<?= $good->getPrice(); ?></h4>
+                    </div>
 
-                <div class="good_add-to-cart_button">
-                    <button type="submit">add to cart</button>
+                    <form action="/add_to_cart" method="POST">
+                        <div class="good_add-to-cart_button">
+                            <input type="hidden" name="goodId" value="<?= $good->getId(); ?>">
+
+                            <input type="submit" value="add to cart">
+                        </div>
+                    </form>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
     </div>
-</div>
 
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') print_r($_POST);
+
+//print_r($_SERVER);
+
+?>
 <style>
     .goods {
         position: absolute;

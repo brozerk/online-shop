@@ -79,3 +79,51 @@
 Произошла ошибка во время обработки запроса
 {"message":"Class \"App\\Repository\\Good\" not found","file":"\/var\/www\/html\/app\/Repository\/CartGoodRepository.php","line":28}
 
+Произошла ошибка во время обработки запроса
+{"message":"Call to undefined function getId()","file":"\/var\/www\/html\/app\/Views\/goods.phtml","line":30}
+
+Произошла ошибка во время обработки запроса
+{"message":"Call to undefined function getId()","file":"\/var\/www\/html\/app\/Views\/goods.phtml","line":30}
+
+Произошла ошибка во время обработки запроса
+{"message":"Call to undefined function getId()","file":"\/var\/www\/html\/app\/Views\/goods.phtml","line":30}
+
+Произошла ошибка во время обработки запроса
+{"message":"Call to undefined function getId()","file":"\/var\/www\/html\/app\/Views\/goods.phtml","line":30}
+
+Произошла ошибка во время обработки запроса
+{"message":"Call to undefined function getId()","file":"\/var\/www\/html\/app\/Views\/goods.phtml","line":30}
+
+Произошла ошибка во время обработки запроса
+{"message":"Call to undefined function getId()","file":"\/var\/www\/html\/app\/Views\/goods.phtml","line":30}
+
+Произошла ошибка во время обработки запроса
+{"message":"App\\Repository\\CartGoodRepository::getByUserIdAndGoodId(): Return value must be of type ?object, bool returned","file":"\/var\/www\/html\/app\/Repository\/CartGoodRepository.php","line":84}
+
+Произошла ошибка во время обработки запроса
+{"message":"Class \"App\\Repository\\CartGood\" not found","file":"\/var\/www\/html\/app\/Repository\/CartGoodRepository.php","line":82}
+
+Произошла ошибка во время обработки запроса
+{"message":"extract(): Argument #1 ($array) must be of type array, null given","file":"\/var\/www\/html\/app\/App.php","line":39}
+
+Произошла ошибка во время обработки запроса
+{"message":"Too few arguments to function App\\Controller\\CartGoodController::addToCartByUserIdAndGoodId(), 1 passed in \/var\/www\/html\/app\/App.php on line 31 and exactly 2 expected","file":"\/var\/www\/html\/app\/Controller\/CartGoodController.php","line":34}
+
+Произошла ошибка во время обработки запроса
+{"message":"Too few arguments to function App\\Controller\\CartGoodController::addToCartByUserIdAndGoodId(), 1 passed in \/var\/www\/html\/app\/App.php on line 31 and exactly 2 expected","file":"\/var\/www\/html\/app\/Controller\/CartGoodController.php","line":34}
+
+Произошла ошибка во время обработки запроса
+{"message":"App\\Repository\\CartGoodRepository::getByUserIdAndGoodId(): Return value must be of type ?object, bool returned","file":"\/var\/www\/html\/app\/Repository\/CartGoodRepository.php","line":85}
+
+Произошла ошибка во время обработки запроса
+{"message":"extract(): Argument #1 ($array) must be of type array, null given","file":"\/var\/www\/html\/app\/App.php","line":39}
+
+Произошла ошибка во время обработки запроса
+{"message":"Too few arguments to function App\\Controller\\CartGoodController::addToCartByGoodId(), 0 passed in \/var\/www\/html\/app\/App.php on line 28 and exactly 1 expected","file":"\/var\/www\/html\/app\/Controller\/CartGoodController.php","line":34}
+
+Произошла ошибка во время обработки запроса
+{"message":"Too few arguments to function App\\Controller\\CartGoodController::addToCartByGoodId(), 0 passed in \/var\/www\/html\/app\/App.php on line 28 and exactly 1 expected","file":"\/var\/www\/html\/app\/Controller\/CartGoodController.php","line":34}
+
+Произошла ошибка во время обработки запроса
+{"message":"extract(): Argument #1 ($array) must be of type array, null given","file":"\/var\/www\/html\/app\/App.php","line":39}
+
