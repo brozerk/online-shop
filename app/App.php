@@ -34,25 +34,8 @@ class App
                 $response = call_user_func($handler);
             }
 
-            list($view, $params, $isLayout) = $response;
+            print_r($response);
 
-            extract($params);
-
-            if ($isLayout) {
-                ob_start();
-
-                require_once $view;
-
-                $content = ob_get_clean();
-
-                $layout = file_get_contents('../Views/layout.phtml');
-
-                $result = str_replace('{content}', $content, $layout);
-
-                print_r($result);
-            } else {
-                require_once $view;
-            }
         } catch (\Throwable $exception) {
             $logger = $this->container->get(LoggerInterface::class);
 

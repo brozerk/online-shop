@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CartGood;
 use App\Entity\Good;
+use App\Entity\User;
 use PDO;
 
 class CartGoodRepository
@@ -14,19 +15,29 @@ class CartGoodRepository
 
     public function getAllByUserId(int $userId): array
     {
-        $cartGoods = [];
-
         $stmt = $this->connection->prepare('
-            SELECT *, g.image, g.name, g.color, g.size, g.price
+            SELECT *
             FROM cart_goods AS c_g
+            JOIN users AS u ON u.id = c_g.user_id
             JOIN goods AS g ON g.id = c_g.good_id
             WHERE c_g.user_id = ?
         ');
         $stmt->execute([$userId]);
-
         $response = $stmt->fetchAll();
 
+        $cartGoods = [];
+
         foreach ($response as $value) {
+            $user = new User(
+                $value['last_name'],
+                $value['first_name'],
+                $value['middle_name'],
+                $value['email'],
+                $value['phone_number'],
+                $value['password']
+            );
+            $user->setId($value['id']);
+
             $good = new Good(
                 $value['name'],
                 $value['category_id'],
@@ -35,12 +46,11 @@ class CartGoodRepository
                 $value['price'],
                 $value['image']
             );
-
             $good->setId($value['id']);
 
             $quantity = $value['quantity'];
 
-            $cartGood = ['good' => $good, 'quantity' => $quantity];
+            $cartGood = new CartGood($user, $good, $quantity);
 
             $cartGoods[] = $cartGood;
         }
@@ -50,48 +60,33 @@ class CartGoodRepository
 
     public function addByUserIdAndGoodId(int $userId, int $goodId): void
     {
-        $cartGood = $this->getByUserIdAndGoodId($userId, $goodId);
-
-        if (!empty($cartGood)) {
             $stmt = $this->connection->prepare('
-                UPDATE cart_goods
-                SET quantity = :quantity
-                WHERE user_id = :userId AND good_id = :goodId
+            INSERT INTO cart_goods AS c_g
+            VALUES (:userId, :goodId, :quantity)
+            ON CONFLICT (user_id, good_id) DO UPDATE
+            SET quantity = c_g.quantity + 1
             ');
             $stmt->execute([
                 'userId' => $userId,
                 'goodId' => $goodId,
-                'quantity' => $cartGood->getQuantity() + 1
+                'quantity' => 1
             ]);
-        } else {
-            $stmt = $this->connection->prepare('
-            INSERT INTO cart_goods
-            VALUES (:userId, :goodId, 1)
-            ');
-            $stmt->execute([
-                'userId' => $userId,
-                'goodId' => $goodId
-            ]);
-        }
     }
 
-    public function getByUserIdAndGoodId(int $userId, int $goodId): ?CartGood
+    public function getQuantityByUserId(int $userId): int
     {
         $stmt = $this->connection->prepare('
-            SELECT *
+            SELECT SUM(quantity)
             FROM cart_goods
-            WHERE user_id = :userId AND good_id = :goodId
+            WHERE user_id = ?
+            GROUP BY user_id
         ');
-        $stmt->execute([
-            'userId' => $userId,
-            'goodId' => $goodId
-        ]);
-
+        $stmt->execute([$userId]);
         $response = $stmt->fetch();
 
-        if (!empty($response)) {
-            return new CartGood($response['user_id'], $response['good_id'], $response['quantity']);
+        if ($response) {
+            return $response['sum'];
         }
-        return null;
+        return 0;
     }
 }

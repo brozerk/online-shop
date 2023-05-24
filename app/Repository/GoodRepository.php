@@ -11,7 +11,7 @@ class GoodRepository
     {
     }
 
-    public function getAll(int $categoryId): array
+    public function getAllByCategoryId(int $categoryId): array
     {
         $goods = [];
 
@@ -40,5 +40,31 @@ class GoodRepository
         }
 
         return $goods;
+    }
+
+    public function getByGoodId(int $goodId): ?object
+    {
+        $stmt = $this->connection->prepare('
+            SELECT *
+            FROM goods
+            WHERE id = ?
+        ');
+        $stmt->execute([$goodId]);
+        $response = $stmt->fetch();
+
+        if (!empty($response)) {
+            $good = new Good(
+                $response['name'],
+                $response['category_id'],
+                $response['color'],
+                $response['size'],
+                $response['price'],
+                $response['image']
+            );
+            $good->setId($response['id']);
+
+            return $good;
+        }
+        return null;
     }
 }

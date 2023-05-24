@@ -42,4 +42,30 @@ class UserRepository
         }
         return $response;
     }
+
+    public function getByUserId(int $userId): ?object
+    {
+        $stmt = $this->connection->prepare('
+            SELECT *
+            FROM users
+            WHERE id = ?
+        ');
+        $stmt->execute([$userId]);
+        $response = $stmt->fetch();
+
+        if (!empty($response)) {
+            $user = new User(
+                $response['last_name'],
+                $response['first_name'],
+                $response['middle_name'],
+                $response['email'],
+                $response['phone_number'],
+                $response['password']
+            );
+            $user->setId($response['id']);
+
+            return $user;
+        }
+        return null;
+    }
 }

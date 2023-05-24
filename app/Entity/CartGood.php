@@ -4,47 +4,47 @@ namespace App\Entity;
 
 class CartGood
 {
-    private int $userId;
-    private int $goodId;
+    private User $user;
+    private Good $good;
     private int $quantity;
 
-    public function __construct(int $userId, int $goodId, int $quantity)
+    public function __construct(User $user, Good $good, int $quantity)
     {
-        $this->setUserId($userId);
-        $this->setGoodId($goodId);
+        $this->setUser($user);
+        $this->setGood($good);
         $this->setQuantity($quantity);
     }
 
     /**
-     * @return int
+     * @return User
      */
-    public function getUserId(): int
+    public function getUser(): User
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param int $userId
+     * @param User $user
      */
-    public function setUserId(int $userId): void
+    public function setUser(User $user): void
     {
-        $this->userId = $userId;
+        $this->user = $user;
     }
 
     /**
-     * @return int
+     * @return Good
      */
-    public function getGoodId(): int
+    public function getGood(): Good
     {
-        return $this->goodId;
+        return $this->good;
     }
 
     /**
-     * @param int $goodId
+     * @param Good $good
      */
-    public function setGoodId(int $goodId): void
+    public function setGood(Good $good): void
     {
-        $this->goodId = $goodId;
+        $this->good = $good;
     }
 
     /**

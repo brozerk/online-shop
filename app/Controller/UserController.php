@@ -4,14 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Services\AuthenticationService;
+use App\ViewRenderer;
 
 class UserController
 {
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository, private AuthenticationService $authenticationService, private ViewRenderer $renderer)
     {
     }
 
-    public function goToSignUp(): array
+    public function goToSignUp(): ?string
     {
         $errors = [];
 
@@ -33,16 +35,16 @@ class UserController
             }
         }
 
-        return [
+        return $this->renderer->render(
             '../Views/signup.phtml',
             [
                 'errors' => $errors,
             ],
             true
-        ];
+        );
     }
 
-    public function goToSignIn(): array
+    public function goToSignIn(): ?string
     {
         session_start();
 
@@ -56,9 +58,7 @@ class UserController
                 $email = $_POST['email'];
                 $password = $_POST['password'];
 
-                $user = $this->userRepository->getByEmail($email);
-
-                if (is_object($user) && password_verify($password, $user->getPassword())) {
+                if ($this->authenticationService->verify($email, $password)) {
                     $_SESSION['id'] = $user->getId();
 
                     header("Location: /catalog");
@@ -68,13 +68,13 @@ class UserController
             }
         }
 
-        return [
+        return $this->renderer->render(
             '../Views/signin.phtml',
             [
                 'errors' => $errors
             ],
             true
-        ];
+        );
     }
 
     private function validateSignUp(array $data): array

@@ -3,27 +3,30 @@
 namespace App\Controller;
 
 use App\Repository\CartGoodRepository;
+use App\ViewRenderer;
 
 class CartGoodController
 {
-    public function __construct(private CartGoodRepository $cartGoodRepository)
+    public function __construct(private CartGoodRepository $cartGoodRepository, private ViewRenderer $renderer)
     {
     }
 
-    public function goToCart(): ?array
+    public function goToCart(): ?string
     {
         session_start();
 
         if (isset($_SESSION['id'])) {
             $cartGoods = $this->cartGoodRepository->getAllByUserId($_SESSION['id']);
+            $cartGoodsQuantity = $this->cartGoodRepository->getQuantityByUserId($_SESSION['id']);
 
-            return [
+            return $this->renderer->render(
                 '../Views/cart.phtml',
                 [
-                    'cartGoods' => $cartGoods
+                    'cartGoods' => $cartGoods,
+                    'cartGoodsQuantity' => $cartGoodsQuantity
                 ],
                 true
-            ];
+            );
         }
 
         header('Location: /signin');
@@ -31,26 +34,16 @@ class CartGoodController
         return null;
     }
 
-    public function addToCart()
+    public function addToCart(): int
     {
         session_start();
 
-        if (isset($_SESSION['id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_SESSION['id'])) {
             $this->cartGoodRepository->addByUserIdAndGoodId($_SESSION['id'], $_POST['goodId']);
 
-            $cartGoods = $this->cartGoodRepository->getAllByUserId($_SESSION['id']);
+//            header('Location: /cart');
 
-            return [
-                '../Views/cart.phtml',
-                [
-                    'cartGoods' => $cartGoods
-                ],
-                true
-            ];
+            return $this->cartGoodRepository->getQuantityByUserId($_SESSION['id']);
         }
-
-        header('Location: /signin');
-
-        return null;
     }
 }

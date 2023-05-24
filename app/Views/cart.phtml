@@ -1,32 +1,32 @@
 <div class="body" align="center">
     <div class="cart-goods body_inner" >
         <?php
-        /** @var \App\Entity\Good $cartGood['good'] */
+        /** @var \App\Entity\CartGood $cartGood */
         foreach ($cartGoods as $cartGood):
             ?>
             <div class="cart-good">
                 <div class="cart-good_image">
-                    <img class="cart-good_image_inner" src="<?= $cartGood['good']->getImage(); ?>"
+                    <img class="cart-good_image_inner" src="<?= $cartGood->getGood()->getImage(); ?>"
                 </div>
 
                 <div class="cart-good_name">
-                    <h3><?= $cartGood['good']->getName(); ?></h3>
+                    <h3><?= $cartGood->getGood()->getName(); ?></h3>
                 </div>
 
                 <div class="cart-good_color">
-                    <span><?= $cartGood['good']->getColor(); ?></span>
+                    <span><?= $cartGood->getGood()->getColor(); ?></span>
                 </div>
 
                 <div class="cart-good_size">
-                    <span><?= $cartGood['good']->getSize(); ?></span>
+                    <span><?= $cartGood->getGood()->getSize(); ?></span>
                 </div>
 
                 <div class="cart-good_price">
-                    <h4>$<?= $cartGood['good']->getPrice(); ?></h4>
+                    <h4>$<?= $cartGood->getGood()->getPrice(); ?></h4>
                 </div>
 
                 <div class="cart-good_quantity">
-                    <span>количество - <?= $cartGood['quantity']; ?></span>
+                    <span>количество - <?= $cartGood->getQuantity(); ?></span>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -42,7 +42,7 @@
     .cart-goods {
         position: absolute;
         left: 50%;
-        top: 30%;
+        top: 25%;
         bottom: 0;
         transform: translate(-50%);
     }

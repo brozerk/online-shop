@@ -25,11 +25,12 @@
                         <h4>$<?= $good->getPrice(); ?></h4>
                     </div>
 
-                    <form action="/add_to_cart" method="POST">
+                    <form class="form" action="/add_to_cart" method="POST">
                         <div class="good_add-to-cart_button">
                             <input type="hidden" name="goodId" value="<?= $good->getId(); ?>">
 
-                            <input type="submit" value="add to cart">
+<!--                            <input type="submit" value="add to cart">-->
+                            <button type="submit">add to cart</button>
                         </div>
                     </form>
                 </div>
@@ -37,18 +38,11 @@
         </div>
     </div>
 
-<?php
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') print_r($_POST);
-
-//print_r($_SERVER);
-
-?>
 <style>
     .goods {
         position: absolute;
         left: 50%;
-        top: 30%;
+        top: 25%;
         bottom: 0;
         transform: translate(-50%);
     }
@@ -60,6 +54,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') print_r($_POST);
 
     .good_image_inner {
         height: 300px;
-        weight: 300px;
+        width: 300px;
     }
 </style>
+
+<script
+    src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+    crossorigin="anonymous">
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.form button').click(function (){
+            var parent = $(this).parent();
+            var goodId = parent.find("[name='goodId']").attr('value');
+            $.post( "/add_to_cart", {goodId: goodId}, function( data ) {
+                // alert(data);
+                $('.cart-quantity').html(data);
+            });
+            return false;
+        });
+    });
+</script>
